@@ -538,6 +538,9 @@ function openConfig() {
 				CONFIG.visual[name] = value;
 				localStorage.setItem(`${APP_NAME}:visual:${name}`, value);
 				lyricContainerUpdate && lyricContainerUpdate();
+				if (name == "ja-detect-threshold" || name == "hans-detect-threshold") {
+					location.reload();
+				}
 			}
 		}),
 		react.createElement("h2", null, "Providers"),
