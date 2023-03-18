@@ -291,11 +291,11 @@ class LyricsContainer extends react.Component {
 	}
 
 	lyricsSource(state) {
-		if (this.state.neteaseTranslation !== null && CONFIG.visual["translation-source"] == 'neteaseTranslation') {
-			return this.state.neteaseTranslation
+		if (this.state.neteaseTranslation !== null && CONFIG.visual["translation-source"] == "neteaseTranslation") {
+			return this.state.neteaseTranslation;
 		}
-		return state
-	};
+		return state;
+	}
 
 	async translateLyrics() {
 		if (!this.translator || !this.translator.finished) {
@@ -304,8 +304,6 @@ class LyricsContainer extends react.Component {
 		}
 
 		const lyricsToTranslate = this.lyricsSource(this.state.synced ?? this.state.unsynced);
-
-		console.log(lyricsToTranslate)
 
 		if (!lyricsToTranslate) return;
 
@@ -594,12 +592,12 @@ class LyricsContainer extends react.Component {
 		const hasNeteaseTranslation = this.state.neteaseTranslation !== null;
 		const language = () => {
 			if (!this.state.synced || !this.state.unsynced) return;
-			if ([CONFIG.visual["translate:force-language"]] == 'off') {
-				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced))
+			if ([CONFIG.visual["translate:force-language"]] == "off") {
+				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced));
 			}
-			return CONFIG.visual["translate:force-language"]
+			return CONFIG.visual["translate:force-language"];
 		};
-		console.log(language())
+		console.log(language());
 		const languageDisplayNames = new Intl.DisplayNames(["en"], { type: "language" });
 		const friendlyLanguage = language() && languageDisplayNames.of(language().split("-")[0]).toLowerCase();
 		const showTranslationButton = (friendlyLanguage || hasNeteaseTranslation) && (mode == SYNCED || mode == UNSYNCED);
