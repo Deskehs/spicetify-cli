@@ -90,11 +90,19 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 
 	let translator = new Translator();
 
-	let menuOptions = null;
+	let sourceOptions = {
+		default: "Default"
+	};
+	const languageOptions = {
+		off: "Off",
+		chinese: "Chinese",
+		japanese: "Japanese"
+	};
+	let modeOptions = {};
 
 	switch (friendlyLanguage) {
 		case "japanese": {
-			menuOptions = {
+			modeOptions = {
 				furigana: "Furigana",
 				romaji: "Romaji",
 				hiragana: "Hiragana",
@@ -103,7 +111,7 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 			break;
 		}
 		case "chinese": {
-			menuOptions = {
+			modeOptions = {
 				cn: "Simplified Chinese",
 				hk: "Traditional Chinese (Hong Kong)",
 				tw: "Traditional Chinese (Taiwan)"
@@ -112,8 +120,8 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 		}
 	}
 	if (hasNeteaseTranslation) {
-		menuOptions = {
-			...menuOptions,
+		sourceOptions = {
+			...sourceOptions,
 			neteaseTranslation: "Netease"
 		};
 	}
@@ -128,10 +136,24 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 				react.createElement(OptionList, {
 					items: [
 						{
+							desc: "Source",
+							key: `translation-source`,
+							type: ConfigSelection,
+							options: sourceOptions,
+							renderInline: true
+						},
+						{
+							desc: "Force Language",
+							key: `translate:force-language`,
+							type: ConfigSelection,
+							options: languageOptions,
+							renderInline: true
+						},
+						{
 							desc: "Mode",
 							key: `translation-mode:${friendlyLanguage}`,
 							type: ConfigSelection,
-							options: menuOptions,
+							options: modeOptions,
 							renderInline: true
 						},
 						{
@@ -149,6 +171,9 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 						lyricContainerUpdate && lyricContainerUpdate();
 						CONFIG.visual[name] ? Spicetify.showNotification("Translating...", false, 500) : null;
 						translator.injectExternals();
+						if (name == "translation-source" || name == "translate:force-language") {
+							location.reload();
+						}
 					}
 				})
 			),
