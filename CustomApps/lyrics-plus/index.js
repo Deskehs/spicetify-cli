@@ -607,6 +607,7 @@ class LyricsContainer extends react.Component {
 		const language = () => {
 			if (!this.state.synced || !this.state.unsynced) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			if ([CONFIG.visual["translate:force-language"]] == "off") {
 				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced));
 			}
@@ -616,11 +617,19 @@ class LyricsContainer extends react.Component {
 =======
 			if ([CONFIG.visual["translate:force-language"]] == 'off') {
 				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced))
+=======
+			if ([CONFIG.visual["translate:force-language"]] == "off") {
+				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced));
+>>>>>>> e8bf717 (prettified and added refresh on theshold settings)
 			}
-			return CONFIG.visual["translate:force-language"]
+			return CONFIG.visual["translate:force-language"];
 		};
+<<<<<<< HEAD
 		console.log(language())
 >>>>>>> fd07f18 (feat(lyrics-plus): force language to convert)
+=======
+		console.log(language());
+>>>>>>> e8bf717 (prettified and added refresh on theshold settings)
 		const languageDisplayNames = new Intl.DisplayNames(["en"], { type: "language" });
 		const friendlyLanguage = language() && languageDisplayNames.of(language().split("-")[0]).toLowerCase();
 		const showTranslationButton = (friendlyLanguage || hasNeteaseTranslation) && (mode == SYNCED || mode == UNSYNCED);
