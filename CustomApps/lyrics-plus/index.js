@@ -606,12 +606,21 @@ class LyricsContainer extends react.Component {
 		const hasNeteaseTranslation = this.state.neteaseTranslation !== null;
 		const language = () => {
 			if (!this.state.synced || !this.state.unsynced) return;
+<<<<<<< HEAD
 			if ([CONFIG.visual["translate:force-language"]] == "off") {
 				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced));
 			}
 			return CONFIG.visual["translate:force-language"];
 		};
 		console.log(language());
+=======
+			if ([CONFIG.visual["translate:force-language"]] == 'off') {
+				return Utils.detectLanguage(this.lyricsSource(this.state.synced || this.state.unsynced))
+			}
+			return CONFIG.visual["translate:force-language"]
+		};
+		console.log(language())
+>>>>>>> fd07f18 (feat(lyrics-plus): force language to convert)
 		const languageDisplayNames = new Intl.DisplayNames(["en"], { type: "language" });
 		const friendlyLanguage = language() && languageDisplayNames.of(language().split("-")[0]).toLowerCase();
 		const showTranslationButton = (friendlyLanguage || hasNeteaseTranslation) && (mode == SYNCED || mode == UNSYNCED);
