@@ -37,35 +37,6 @@ const SwapButton = ({ icon, disabled, onClick }) => {
 	);
 };
 
-const CacheButton = () => {
-	let lyrics = {};
-	try {
-		const localLyrics = JSON.parse(localStorage.getItem("lyrics-plus:local-lyrics"));
-		if (!localLyrics || typeof localLyrics !== "object") {
-			throw "";
-		}
-		lyrics = localLyrics;
-	} catch {
-		lyrics = {};
-	}
-
-	const [count, setCount] = useState(Object.keys(lyrics).length);
-	const text = !!count ? "Clear cached lyrics" : "No cached lyrics";
-
-	return react.createElement(
-		"button",
-		{
-			className: "btn",
-			onClick: () => {
-				localStorage.removeItem("lyrics-plus:local-lyrics");
-				setCount(0);
-			},
-			disabled: !count
-		},
-		text
-	);
-};
-
 const ConfigSlider = ({ name, defaultValue, onChange = () => {} }) => {
 	const [active, setActive] = useState(defaultValue);
 
@@ -329,7 +300,6 @@ const ServiceOption = ({ item, onToggle, onSwap, isFirst = false, isLast = false
 				{
 					className: "col action"
 				},
-				item.name === "local" && react.createElement(CacheButton),
 				react.createElement(SwapButton, {
 					icon: Spicetify.SVGIcons["chart-up"],
 					onClick: () => onSwap(item.name, -1),
@@ -432,15 +402,6 @@ function openConfig() {
 		react.createElement(OptionList, {
 			items: [
 				{
-					desc: "Global delay",
-					info: "Offset (in ms) across all tracks.",
-					key: "global-delay",
-					type: ConfigAdjust,
-					min: -10000,
-					max: 10000,
-					step: 250
-				},
-				{
 					desc: "Font size",
 					info: "(or Ctrl + Mouse scroll in main app)",
 					key: "font-size",
@@ -536,6 +497,7 @@ function openConfig() {
 			],
 			onChange: (name, value) => {
 				CONFIG.visual[name] = value;
+				console.log(CONFIG.visual, APP_NAME, name, value);
 				localStorage.setItem(`${APP_NAME}:visual:${name}`, value);
 				lyricContainerUpdate && lyricContainerUpdate();
 				if (name == "ja-detect-threshold" || name == "hans-detect-threshold") {
