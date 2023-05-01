@@ -49,9 +49,8 @@ const CONFIG = {
 		["translation-source"]: localStorage.getItem("lyrics-plus:visual:translation-source") || "default",
 		["translate:force-language"]: localStorage.getItem("lyrics-plus:visual:translate:force-language") || "off",
 		["translation-mode:japanese"]: localStorage.getItem("lyrics-plus:visual:translation-mode:japanese") || "furigana",
-		["translation-mode:korean"]: localStorage.getItem("lyrics-plus:visual:translation-mode:korean") || "hangul",
 		["translation-mode:chinese"]: localStorage.getItem("lyrics-plus:visual:translation-mode:chinese") || "cn",
-		["translate"]: getConfig("lyrics-plus:visual:translate", false),
+		["translate"]: getConfig("lyrics-plus:visual:translate"),
 		["ja-detect-threshold"]: localStorage.getItem("lyrics-plus:visual:ja-detect-threshold") || "40",
 		["hans-detect-threshold"]: localStorage.getItem("lyrics-plus:visual:hans-detect-threshold") || "40",
 		["fade-blur"]: getConfig("lyrics-plus:visual:fade-blur"),
@@ -254,8 +253,6 @@ class LyricsContainer extends react.Component {
 			this.state.romaji =
 			this.state.hiragana =
 			this.state.katakana =
-			this.state.hangul =
-			this.state.romaja =
 			this.state.cn =
 			this.state.hk =
 			this.state.tw =
@@ -335,33 +332,21 @@ class LyricsContainer extends react.Component {
 			["hiragana", "furigana", "furigana"],
 			["hiragana", "normal", "hiragana"],
 			["katakana", "normal", "katakana"]
-		].forEach(params => {
-			if (language !== "ja") return;
+		].map(params => {
+			if (language != "ja") return;
 			this.translator.romajifyText(lyricText, params[0], params[1]).then(result => {
 				Utils.processTranslatedLyrics(result, lyricsToTranslate, { state: this.state, stateName: params[2] });
 				lyricContainerUpdate && lyricContainerUpdate();
 			});
 		});
-
-		[
-			["hangul", "hangul"],
-			["romaja", "romaja"]
-		].forEach(params => {
-			if (language !== "ko") return;
-			this.translator.convertToRomaja(lyricText, params[1]).then(result => {
-				Utils.processTranslatedLyrics(result, lyricsToTranslate, { state: this.state, stateName: params[1] });
-				lyricContainerUpdate && lyricContainerUpdate();
-			});
-		});
-
 		[
 			["cn", "hk"],
 			["cn", "tw"],
 			["t", "cn"],
 			["t", "hk"],
 			["t", "tw"]
-		].forEach(params => {
-			if (!language.includes("zh") || (language === "zh-hans" && params[0] === "t") || (language === "zh-hant" && params[0] === "cn")) return;
+		].map(params => {
+			if (!language.includes("zh") || (language == "zh-hans" && params[0] == "t") || (language == "zh-hant" && params[0] == "cn")) return;
 			this.translator.convertChinese(lyricText, params[0], params[1]).then(result => {
 				Utils.processTranslatedLyrics(result, lyricsToTranslate, { state: this.state, stateName: params[1] });
 				lyricContainerUpdate && lyricContainerUpdate();

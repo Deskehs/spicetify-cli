@@ -97,8 +97,7 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 	const languageOptions = {
 		off: "Off",
 		chinese: "Chinese",
-		japanese: "Japanese",
-		korean: "Korean"
+		japanese: "Japanese"
 	};
 	let modeOptions = {};
 
@@ -109,13 +108,6 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 				romaji: "Romaji",
 				hiragana: "Hiragana",
 				katakana: "Katakana"
-			};
-			break;
-		}
-		case "korean": {
-			menuOptions = {
-				hangul: "Hangul",
-				romaja: "Romaja"
 			};
 			break;
 		}
@@ -138,7 +130,57 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 	return react.createElement(
 		Spicetify.ReactComponent.TooltipWrapper,
 		{
-			label: "Conversion"
+			menu: react.createElement(
+				Spicetify.ReactComponent.Menu,
+				{},
+				react.createElement("h3", null, " Conversions"),
+				react.createElement(OptionList, {
+					items: [
+						{
+							desc: "Source",
+							key: `translation-source`,
+							type: ConfigSelection,
+							options: sourceOptions,
+							renderInline: true
+						},
+						{
+							desc: "Force Language",
+							key: `translate:force-language`,
+							type: ConfigSelection,
+							options: languageOptions,
+							renderInline: true
+						},
+						{
+							desc: "Mode",
+							key: `translation-mode:${friendlyLanguage}`,
+							type: ConfigSelection,
+							options: modeOptions,
+							renderInline: true
+						},
+						{
+							desc: "Convert",
+							key: "translate",
+							type: ConfigSlider,
+							trigger: "click",
+							action: "toggle",
+							renderInline: true
+						}
+					],
+					onChange: (name, value) => {
+						CONFIG.visual[name] = value;
+						localStorage.setItem(`${APP_NAME}:visual:${name}`, value);
+						lyricContainerUpdate && lyricContainerUpdate();
+						CONFIG.visual[name] ? Spicetify.showNotification("Translating...", false, 500) : null;
+						translator.injectExternals();
+						if (name == "translation-source" || name == "translate:force-language") {
+							location.reload();
+						}
+					}
+				})
+			),
+			trigger: "click",
+			action: "toggle",
+			renderInline: true
 		},
 		react.createElement(
 			"div",
@@ -197,22 +239,7 @@ const TranslationMenu = react.memo(({ showTranslationButton, friendlyLanguage, h
 					action: "toggle",
 					renderInline: true
 				},
-				react.createElement(
-					"button",
-					{
-						className: "lyrics-config-button"
-					},
-					react.createElement(
-						"p1",
-						{
-							width: 16,
-							height: 16,
-							viewBox: "0 0 16 10.3",
-							fill: "currentColor"
-						},
-						"⇄"
-					)
-				)
+				"⇄"
 			)
 		)
 	);
